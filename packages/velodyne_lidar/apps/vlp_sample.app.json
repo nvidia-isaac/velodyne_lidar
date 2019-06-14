@@ -1,0 +1,129 @@
+{
+  "name": "vlp16_sample",
+  "modules": [
+    "velodyne_lidar",
+    "@com_nvidia_isaac//packages/perception",
+    "@com_nvidia_isaac//packages/viewers"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "name": "vlp16",
+        "components": [
+          {
+            "name": "lidar_initializer",
+            "type": "isaac::alice::PoseInitializer"
+          },
+          {
+            "name": "message_ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "isaac.velodyne_lidar.VelodyneLidar",
+            "type": "isaac::velodyne_lidar::VelodyneLidar"
+          }
+        ]
+      },
+      {
+        "name": "scan_accumulator",
+        "components": [
+          {
+            "name": "message_ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "isaac.perception.ScanAccumulator",
+            "type": "isaac::perception::ScanAccumulator"
+          }
+        ]
+      },
+      {
+        "name": "point_cloud",
+        "components": [
+          {
+            "name": "ml",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "isaac.perception.RangeToPointCloud",
+            "type": "isaac::perception::RangeToPointCloud"
+          }
+        ]
+      },
+      {
+        "name": "viewer",
+        "components": [
+          {
+            "name": "message_ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "isaac.viewers.PointCloudViewer",
+            "type": "isaac::viewers::PointCloudViewer"
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source": "vlp16/isaac.velodyne_lidar.VelodyneLidar/scan",
+        "target": "scan_accumulator/isaac.perception.ScanAccumulator/scan"
+      },
+      {
+        "source": "scan_accumulator/isaac.perception.ScanAccumulator/fullscan",
+        "target": "point_cloud/isaac.perception.RangeToPointCloud/scan"
+      },
+      {
+        "source": "point_cloud/isaac.perception.RangeToPointCloud/cloud",
+        "target": "viewer/isaac.viewers.PointCloudViewer/cloud"
+      }
+    ]
+  },
+  "config": {
+    "vlp16": {
+      "isaac.velodyne_lidar.VelodyneLidar": {
+        "ip": "192.168.0.5"
+      },
+      "lidar_initializer": {
+        "lhs_frame": "ground",
+        "rhs_frame": "lidar",
+        "pose": [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    "viewer": {
+      "message_ledger": {
+        "history": 10
+      },
+      "isaac.viewers.PointCloudViewer": {
+        "max_distance": 500,
+        "frame": "ground"
+      }
+    },
+    "websight": {
+      "WebsightServer": {
+        "webroot": "external/com_nvidia_isaac/packages/sight/webroot",
+        "assetroot": "../isaac_assets",
+        "port": 3000,
+        "ui_config": {
+          "windows": {
+            "Velodyne Scan - 3D View": {
+              "channels": [
+                {
+                  "active": true,
+                  "name": "vlp16_sample/viewer/isaac.viewers.PointCloudViewer/points"
+                }
+              ],
+              "dims": {
+                "height": 480,
+                "width": 640
+              },
+              "renderer": "3d"
+            }
+          },
+          "assets": {
+          }
+        }
+      }
+    }
+  }
+}

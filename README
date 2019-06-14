@@ -1,0 +1,16 @@
+To build the Isaak SDK:
+
+1. Download Isaac SDK Nightly Release 05/28 from the following website:
+   
+   https://developer.nvidia.com/isaac/downloads
+
+2. Extract the release package in a local folder.
+
+3. Open the file WORKSPACE in a text editor and specify the Isaac SDK folder for
+   "com_nvidia_isaac".
+
+4. Build Isaac SDK with the following command:
+
+   bazel build ...
+
+5. Enjoy!

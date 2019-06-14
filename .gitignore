@@ -1,0 +1,9 @@
+bazel*
+cscope.*
+*.swp
+*.sublime-project
+*.sublime-workspace
+*.pyc
+.vscode/*
+imgui.ini
+
