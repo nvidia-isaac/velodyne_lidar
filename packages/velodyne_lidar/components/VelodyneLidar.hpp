@@ -67,8 +67,8 @@ class VelodyneLidar : public alice::Codelet {
 
  private:
   // Process a packet of data coming on the wire with VLP16Format
-  void processDataBlockVPL16(const VelodyneRawDataBlock& raw_block,
-                             capnp::List<RangeScanProto::Ray>::Builder& rays, int offset);
+  void processDataBlockVPL16(const VelodyneRawDataBlock& raw_block, TensorView2ui16 ranges,
+                             TensorView2ub intensities, int offset);
 
   // Configures some member variables according to the lidar type
   void initLaser(VelodyneModelType model_type);

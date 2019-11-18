@@ -25,17 +25,20 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 #include "VelodyneLidar.hpp"
 
 #include <cerrno>
 #include <cmath>
 #include <cstring>
+#include <utility>
 #include <vector>
 
 #include "engine/core/assert.hpp"
 #include "engine/core/constants.hpp"
 #include "engine/core/logger.hpp"
 #include "engine/gems/coms/socket.hpp"
+#include "messages/tensor.hpp"
 
 namespace isaac {
 namespace velodyne_lidar {
@@ -80,7 +83,18 @@ void VelodyneLidar::tick() {
   // Prepare the rays
   const uint32_t number_of_rays =
       kNumberOfAccumulatedPackets * parameters_.blocks_per_packet * parameters_.channels_per_block;
-  auto rays_proto = range_scan_proto.initRays(number_of_rays);
+  if (parameters_.vertical_beams <= 0) {
+    reportFailure("Number of vertical beams needs to be positive");
+    return;
+  }
+  if (number_of_rays % parameters_.vertical_beams != 0) {
+    reportFailure("Number of rays (%d) is not divisible by number of vertical beams (%d)",
+                  number_of_rays, parameters_.vertical_beams);
+    return;
+  }
+  const size_t number_of_slices = number_of_rays / parameters_.vertical_beams;
+  Tensor2ui16 ranges(number_of_slices, parameters_.vertical_beams);
+  Tensor2ub intensities(number_of_slices, parameters_.vertical_beams);
 
   // For the very first time we run this we do not have a previous package and need to do some
   // special handling.
@@ -115,7 +129,8 @@ void VelodyneLidar::tick() {
           processDataBlockVPL16(
               *reinterpret_cast<VelodyneRawDataBlock*>(raw_packet_.data() +
                                                        j * parameters_.block_size),
-              rays_proto, (i * parameters_.blocks_per_packet + j) * parameters_.channels_per_block);
+              ranges.view(), intensities.view(),
+              (i * parameters_.blocks_per_packet + j) * parameters_.channels_per_block);
         }
       }
     }
@@ -148,6 +163,8 @@ void VelodyneLidar::tick() {
     thetas_proto.set(2 * i, a1);
     thetas_proto.set(2 * i + 1, a1 + 0.5 * DeltaAngle(a2, a1));
   }
+  ToProto(std::move(ranges), range_scan_proto.initRanges(), tx_scan().buffers());
+  ToProto(std::move(intensities), range_scan_proto.initIntensities(), tx_scan().buffers());
   // publish
   tx_scan().publish();
 }
@@ -157,7 +174,7 @@ void VelodyneLidar::stop() {
 }
 
 void VelodyneLidar::processDataBlockVPL16(const VelodyneRawDataBlock& raw_block,
-                                          capnp::List<RangeScanProto::Ray>::Builder& rays,
+                                          TensorView2ui16 ranges, TensorView2ub intensities,
                                           int offset) {
   const uint16_t min_range_u16 =
       static_cast<uint16_t>(parameters_.minimum_range / kDistanceToMeters);
@@ -169,12 +186,16 @@ void VelodyneLidar::processDataBlockVPL16(const VelodyneRawDataBlock& raw_block,
       LOG_ERROR("Invalid raw_packet");
     }
     const VelodyneRawChannel& channel = raw_block.channels[i];
+    const size_t index = offset + i;
+    ASSERT(parameters_.vertical_beams > 0, "Number of vertical beams needs to be positive");
+    const size_t phi_index = index % parameters_.vertical_beams;
+    const size_t theta_index = index / parameters_.vertical_beams;
     if (channel.distance < min_range_u16 || max_range_u16 < channel.distance) {
-      rays[offset + i].setRange(0);
-      rays[offset + i].setIntensity(0);
+      ranges(theta_index, phi_index) = 0;
+      intensities(theta_index, phi_index) = 0;
     } else {
-      rays[offset + i].setRange(channel.distance);
-      rays[offset + i].setIntensity(channel.reflectivity);
+      ranges(theta_index, phi_index) = channel.distance;
+      intensities(theta_index, phi_index) = channel.reflectivity;
     }
   }
 }

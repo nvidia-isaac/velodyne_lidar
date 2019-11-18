@@ -31,9 +31,9 @@ build --action_env=target_platform="x86_64"
 build:x86_64 --define=target_platform=x86_64 --strip=always
 build:x86_64 --action_env=target_platform="x86_64"
 
-build:jetpack42 --cpu=arm64-v8a --strip=always
-build:jetpack42 --define=target_platform=jetpack42
-build:jetpack42 --action_env=target_platform="jetpack42"
+build:jetpack43 --cpu=arm64-v8a --strip=always
+build:jetpack43 --define=target_platform=jetpack43
+build:jetpack43 --action_env=target_platform="jetpack43"
 
 test --test_output=errors --keep_going --color=yes -c opt
 test --test_tag_filters=-lint
