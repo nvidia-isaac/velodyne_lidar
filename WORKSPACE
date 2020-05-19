@@ -36,14 +36,14 @@ local_repository(
 
 load("@com_nvidia_isaac//third_party:engine.bzl", "isaac_engine_workspace")
 load("@com_nvidia_isaac//third_party:packages.bzl", "isaac_packages_workspace")
-load("@com_nvidia_isaac//engine/build:isaac.bzl", "isaac_git_repository", "isaac_new_http_archive")
+load("@com_nvidia_isaac//engine/build:isaac.bzl", "isaac_git_repository", "isaac_http_archive")
 
 isaac_engine_workspace()
 
 isaac_packages_workspace()
 
 # Loads before boost to override for aarch64 specific config
-isaac_new_http_archive(
+isaac_http_archive(
     name = "org_lzma_lzma",
     build_file = "@com_nvidia_isaac//third_party:lzma.BUILD",
     licenses = ["@org_lzma_lzma//:COPYING"],
