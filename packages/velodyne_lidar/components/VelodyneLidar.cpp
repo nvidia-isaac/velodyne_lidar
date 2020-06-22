@@ -36,8 +36,8 @@
 #include "engine/core/assert.hpp"
 #include "engine/core/constants.hpp"
 #include "engine/core/logger.hpp"
-#include "engine/gems/coms/socket.hpp"
 #include "messages/tensor.hpp"
+#include "packages/coms/gems/socket.hpp"
 
 namespace isaac {
 namespace velodyne_lidar {

@@ -7,7 +7,7 @@ To build the Isaak SDK:
 2. Extract the release package in a local folder.
 
 3. Open the file WORKSPACE in a text editor and specify the Isaac SDK folder for
-   "com_nvidia_isaac".
+   "ISAAC_SDK_RELEASE".
 
 4. Build Isaac SDK with the following command:
 

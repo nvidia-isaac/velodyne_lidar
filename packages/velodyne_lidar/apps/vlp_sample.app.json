@@ -2,8 +2,8 @@
   "name": "vlp16_sample",
   "modules": [
     "velodyne_lidar",
-    "@com_nvidia_isaac//packages/perception",
-    "@com_nvidia_isaac//packages/viewers"
+    "@com_nvidia_isaac_sdk//packages/perception",
+    "@com_nvidia_isaac_sdk//packages/viewers"
   ],
   "graph": {
     "nodes": [
@@ -101,7 +101,7 @@
     },
     "websight": {
       "WebsightServer": {
-        "webroot": "external/com_nvidia_isaac/packages/sight/webroot",
+        "webroot": "external/com_nvidia_isaac_sdk/packages/sight/webroot",
         "assetroot": "../isaac_assets",
         "port": 3000,
         "ui_config": {

@@ -26,14 +26,21 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-load("@com_nvidia_isaac_sdk//bzl:module.bzl", "isaac_app")
+load("@com_nvidia_isaac_sdk//bzl:py.bzl", "isaac_py_app")
 
-isaac_app(
-    name = "vlp16_sample",
-    app_json_file = "vlp_sample.app.json",
+isaac_py_app(
+    name = "sub",
+    srcs = [
+        "sub.py",
+    ],
+    data = [
+        "sub.app.json",
+        "@com_nvidia_isaac_sdk//packages/navsim/apps:navsim_navigation_subgraph",
+        "@com_nvidia_isaac_sdk//packages/navsim/apps:navsim_tcp_subgraph",
+    ],
     modules = [
-        "velodyne_lidar",
-        "@com_nvidia_isaac_sdk//packages/perception",
-        "@com_nvidia_isaac_sdk//packages/viewers",
+    ],
+    deps = [
+        "@com_nvidia_isaac_sdk//packages/pyalice",
     ],
 )

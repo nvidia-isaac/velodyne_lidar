@@ -26,12 +26,12 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-load("@com_nvidia_isaac//engine/build:isaac.bzl", "isaac_cc_library", "isaac_cc_module", "isaac_component")
+load("@com_nvidia_isaac_sdk//bzl:module.bzl", "isaac_cc_module")
 
 isaac_cc_module(
     name = "velodyne_lidar",
     deps = [
         "//packages/velodyne_lidar/components:velodyne_lidar",
-        "@com_nvidia_isaac//engine/gems/coms:socket",
+        "@com_nvidia_isaac_sdk//packages/coms/gems:socket",
     ],
 )

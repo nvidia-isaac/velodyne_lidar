@@ -1,0 +1,21 @@
+{
+    "name": "vlp16_sample",
+    "modules": [],
+    "graph": {
+        "nodes": [],
+        "edges": []
+    },
+    "config": {
+        "websight": {
+            "WebsightServer": {
+                "webroot": "external/com_nvidia_isaac_sdk/packages/sight/webroot",
+                "assetroot": "../isaac_assets",
+                "port": 3000,
+                "ui_config": {
+                    "windows": {},
+                    "assets": {}
+                }
+            }
+        }
+    }
+}

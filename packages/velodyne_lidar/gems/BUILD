@@ -26,12 +26,12 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-load("@com_nvidia_isaac//engine/build:isaac.bzl", "isaac_cc_library", "isaac_cc_module", "isaac_component")
+load("@com_nvidia_isaac_engine//bzl:isaac_engine.bzl", "isaac_cc_library")
 
 isaac_cc_library(
     name = "gems",
     srcs = ["velodyne_constants.cpp"],
     hdrs = ["velodyne_constants.hpp"],
     visibility = ["//visibility:public"],
-    deps = ["@com_nvidia_isaac//engine/core"],
+    deps = ["@com_nvidia_isaac_engine//engine/core"],
 )
