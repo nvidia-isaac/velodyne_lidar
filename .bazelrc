@@ -31,9 +31,9 @@ build --action_env=target_platform="x86_64"
 build:x86_64 --define=target_platform=x86_64
 build:x86_64 --action_env=target_platform="x86_64"
 
-build:jetpack43 --cpu=aarch64
-build:jetpack43 --define=target_platform=jetpack43
-build:jetpack43 --action_env=target_platform="jetpack43"
+build:jetpack44 --cpu=aarch64
+build:jetpack44 --define=target_platform=jetpack44
+build:jetpack44 --action_env=target_platform="jetpack44"
 
 test --test_output=errors --keep_going --color=yes -c opt --features=legacy_whole_archive
 test --test_tag_filters=-lint
