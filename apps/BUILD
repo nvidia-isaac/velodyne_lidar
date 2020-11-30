@@ -39,6 +39,7 @@ isaac_py_app(
         "@com_nvidia_isaac_sdk//packages/navsim/apps:navsim_tcp_subgraph",
     ],
     modules = [
+        "@com_nvidia_isaac_sdk//packages/sight",
     ],
     deps = [
         "@com_nvidia_isaac_sdk//packages/pyalice",

@@ -1,6 +1,8 @@
 {
     "name": "vlp16_sample",
-    "modules": [],
+    "modules": [
+        "@com_nvidia_isaac_sdk//packages/sight"
+    ],
     "graph": {
         "nodes": [],
         "edges": []

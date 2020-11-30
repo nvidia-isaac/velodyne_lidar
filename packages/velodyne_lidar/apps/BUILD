@@ -34,6 +34,7 @@ isaac_app(
     modules = [
         "velodyne_lidar",
         "@com_nvidia_isaac_sdk//packages/perception",
+        "@com_nvidia_isaac_sdk//packages/sight",
         "@com_nvidia_isaac_sdk//packages/viewers",
     ],
 )
