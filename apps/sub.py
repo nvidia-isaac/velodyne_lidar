@@ -18,5 +18,10 @@ if __name__ == '__main__':
     app.load(
         "@com_nvidia_isaac_sdk//packages/navsim/apps/navsim_navigation.subgraph.json",
         prefix="sub")
+    app.load_module("@com_nvidia_isaac_sdk//packages/sight")
+    comp_sight = app.nodes["websight"]["WebsightServer"]
+    comp_sight.config["webroot"] = "external/com_nvidia_isaac_sdk/packages/sight/webroot"
+    comp_sight.config["assetroot"] = "../isaac_assets"
+    comp_sight.config["port"] = 3000
 
     app.run()
