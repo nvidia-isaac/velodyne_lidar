@@ -34,8 +34,8 @@ isaac_py_app(
         "sub.py",
     ],
     data = [
+        "foo.capnp",
         "sub.app.json",
-        "@com_nvidia_isaac_sdk//packages/navsim/apps:navsim_navigation_subgraph",
         "@com_nvidia_isaac_sdk//packages/navsim/apps:navsim_tcp_subgraph",
     ],
     modules = [
